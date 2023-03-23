@@ -15,15 +15,17 @@
         }
         h1 {
             font-family: sans-serif;
+            text-align: center;
         }
         #map-canvas { 
-          height: 500px;
-          width: 800px;
+          height: 700px;
+          width: 1500px;
+          justify-content: center;
+        }
 
         path {
-          fill: yellow;
           stroke-width: 2px;
-          stroke: red;
+          stroke: #702963;
           stroke-opacity: 1;
         }
 
@@ -31,7 +33,7 @@
   </head>
 
   <body>
-    <h1>???</h1>
+    <h1>A Year in NYC</h1>
     <div id="map-canvas"></div>
 
     <script type="text/javascript">
@@ -40,6 +42,7 @@
       //TODO: slider to change speed?
       //TODO: separate lines for each day?
       //TODO: have lines fade over time?
+
 
       //setup map tiles
       var mapTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -58,7 +61,8 @@
 
       var dateConvert = {'01': 'January', '02': 'February', '03': 'March', '04': 'April', '05': 'May', '06': 'June', '07': 'July', '08': 'August', '09': 'September', '10': 'October', '11': 'November', '12': 'December'}
 
-      d3.json("filt_locs.json", function(data){
+      d3.json("filt_locs.json", function(err, data) {
+        console.log(data)
 
         small_data = data.features
 
@@ -96,17 +100,19 @@
                       .attr("fill", "none")
                       .attr("stroke", "blue");
 
+
         //marker that traces the path
         var marker = g.append("circle")
             .attr("r", 10)
             .attr("id", "marker")
-            .attr("fill", "yellow")
+            .attr("fill", "white")
             .attr("opacity", "0.75")
             .attr("class", "travelMarker");
 
         var dateLabel = g.append("text")
                     .attr("x", 10)
                     .attr("y", height - 10)
+                    .attr("id", "date")
                     .text(function (d) { return convertDate(small_data[0].properties.id) });
 
         map.on("viewreset", reset);
@@ -170,6 +176,7 @@
             interpolate = d3.interpolateString("0," + l, l + "," + l); 
             var marker = d3.select("#marker");
             var p = linePath.node().getPointAtLength(t * l);
+            console.log(linePath.node().parentNode)
             marker.attr("transform", "translate(" + p.x + "," + p.y + ")"); //move marker
             return interpolate(t);
           }
