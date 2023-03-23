@@ -34,3 +34,4 @@ The structure of the data looks like this if you'd like to replicate it on your 
         },
         ...
 ```
+One you have the data you should be able to run a simple web server and watch the viz locally.
